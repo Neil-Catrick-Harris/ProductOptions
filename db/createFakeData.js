@@ -1,7 +1,7 @@
 const faker = require('faker');
 const mongoose = require('mongoose');
 
-mongoose.connect('mongodb://localhost/mykea', { useNewUrlParser: true })
+mongoose.connect('mongodb://localhost/mykea', { useNewUrlParser: true, useUnifiedTopology: true })
 
 const reviewSchema = mongoose.Schema({
   overallRating: { type: Number, min: 1, max: 5},
@@ -34,12 +34,13 @@ const reviewSchema = mongoose.Schema({
  let Item = mongoose.model('Item', itemSchema);
 
 const createFakeData = () => {
+  let documentNum = 10;
 
   let dataArray = [];
   let id = 0;
   let samePrice = true;
 
-  for (let i = 0; i < 101; i++) {
+  for (let i = 0; i < documentNum; i++) {
     let reviews = [];
 
     for (let j = 0; j < Math.floor(Math.random() * 26); j++) {
@@ -119,16 +120,19 @@ const createFakeData = () => {
     dataArray.push({ title, description, price, colors, sizes, liked, inStock, reviews, id });
     id++;
   }
-
   return dataArray;
 }
+
+let start = new Date();
 
 Item.insertMany(createFakeData())
   .then(() => {
     Item.find({})
       .then((results) => {
-        console.log(results)
-        console.log(`${results.length} pieces of data in the database`)
+        let end = new Date();
+        console.log(`Database took ${end - start} milliseconds to seed ${documentNum} documents using MongoDB with mongoose.`)
+        // console.log(results)
+        // console.log(`${results.length} pieces of data in the database`)
         mongoose.connection.close()
       })
   })

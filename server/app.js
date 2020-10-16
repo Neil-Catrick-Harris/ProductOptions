@@ -10,12 +10,12 @@ app.use('/', express.static('./client/dist'))
 
 
 app.get('/api/productOptions/products/:id', (req, res) => {
-  console.log(req.params);
+  // console.log(req.params);
   let id = req.params.id;
-  console.log('this is id', id)
+  // console.log('this is id', id)
   db.Item.findOne({ id })
     .then((results) => {
-      console.log(results);
+      // console.log(results);
       res.json(results);
     })
     .catch((err) => {
