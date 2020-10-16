@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
-    "start": "node ./server/server.js",
-    "nodemon": "nodemon ./server/server.js",
+    "start": "node .server/previousServer/server.js",
+    "nodemon": "nodemon .server/previousServer/server.js",
     "postinstall": "node ./db/createFakeData.js",
     "build": "webpack --watch",
     "genDataItems": "node ./db/ItemDataGenerationScript.js",

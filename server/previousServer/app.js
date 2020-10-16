@@ -20,7 +20,7 @@ app.get('/api/productOptions/products/:id', (req, res) => {
     })
     .catch((err) => {
       console.log(err);
-      res.json(err);
+      res.send(400);
     })
 })
 
@@ -36,7 +36,7 @@ app.patch('/api/productOptions/products/:id', (req, res) => {
     })
     .catch((err) => {
       console.log(err);
-      res.json(err);
+      res.send(400);
     })
 })
 
@@ -56,6 +56,9 @@ app.delete('/', (req, res) => {
   db.Item.deleteMany({})
   .then((results) => {
     res.json(results);
+  })
+  .catch((err) => {
+    res.send(400);
   })
 })
 
