@@ -3,7 +3,7 @@ const fs = require('fs');
 const csvWriter = require('csv-write-stream');
 let writer = csvWriter();
 
-let documentNum = 10;
+let documentNum = 1000000;
 let id = 0;
 let samePrice = true;
 
@@ -13,24 +13,17 @@ const generateFakeItemDataScript = () => {
     let title = faker.lorem.word();
 
     let description = faker.lorem.sentence();
-
-    // Random prices w/ sales
-
     let price;
     let currentPrice = faker.commerce.price();
-
     if (samePrice) {
-
        price = {
         originalPrice: currentPrice,
         salePrice: currentPrice
       }
-
     } else {
         let newPrice = faker.commerce.price();
         let higherPrice;
         let lowerPrice;
-
         if (newPrice > currentPrice) {
           higherPrice = newPrice;
           lowerPrice = currentPrice;
@@ -42,31 +35,28 @@ const generateFakeItemDataScript = () => {
           originalPrice: higherPrice,
           salePrice: lowerPrice
         }
-      }
+    }
 
     samePrice = !samePrice
 
-    // Random colors
     let colors = [];
     for (let j = 0; j < Math.floor(Math.random() * 6); j++) {
       colors.push(faker.commerce.color())
     }
 
-    // Random Sizes
     let sizes = [];
     let sizeOptions = ['Small', 'Medium', 'Large', 'XL']
-    for (let j = 0; j < Math.floor(Math.random() * 4); j++) {
+    for (let j = 0; j < Math.floor(Math.random() * sizeOptions.length); j++) {
       sizes.push(sizeOptions[j]);
     }
 
-    // All products start unliked
     let liked = false;
 
     let inStock;
     if (Math.random() <= 0.2) {
       inStock = 0;
     } else {
-      inStock = Math.floor(Math.random() * 15000)
+      inStock = Math.floor(Math.random() * 15000);
     }
 
     writer.write({
