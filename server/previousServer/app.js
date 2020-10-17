@@ -19,7 +19,7 @@ app.get('/api/productOptions/products/:id', (req, res) => {
       res.json(results);
     })
     .catch((err) => {
-      throw err;
+      console.log(err);
       res.send(400);
     })
 })
@@ -35,7 +35,7 @@ app.patch('/api/productOptions/products/:id', (req, res) => {
       res.json(item);
     })
     .catch((err) => {
-      throw err;
+      console.log(err);
       res.send(400);
     })
 })
@@ -70,7 +70,7 @@ app.put('/api/productOptions/products/:id', (req,res) => {
       }
     })
     .catch((err) => {
-      throw err;
+      console.log(err);
       res.send(400);
     })
 
@@ -105,7 +105,7 @@ app.delete('/api/data', (req, res) => {
     res.json(results);
   })
   .catch((err) => {
-    throw err;
+    console.log(err);
     res.send(400);
   })
 })
