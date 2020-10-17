@@ -5,12 +5,12 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
-    "start": "node .server/previousServer/server.js",
-    "nodemon": "nodemon .server/previousServer/server.js",
-    "postinstall": "node ./db/createFakeData.js",
+    "start": "node ./server/previousServer/server.js",
+    "nodemon": "nodemon ./server/previousServer/server.js",
+    "postinstall": "node ./database/DataOnPreviousApp/MongoDBDatabase/createFakeData.js",
     "build": "webpack --watch",
-    "genDataItems": "node ./db/ItemDataGenerationScript.js",
-    "genDataReviews": "node ./db/ReviewDataGenerationScript.js"
+    "genDataItems": "node ./database/ItemDataGenerationScript.js",
+    "genDataReviews": "node ./database/ReviewDataGenerationScript.js"
   },
   "author": "August Dolan",
   "license": "ISC",
