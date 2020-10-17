@@ -7,8 +7,8 @@ let documentNum = 10;
 let id = 0;
 let samePrice = true;
 const generateFakeReviewDataScript = () => {
-
-  writer.pipe(fs.createWriteStream('./db/sampleDataScripts/reviewsData.csv'));
+  let start = new Date();
+  writer.pipe(fs.createWriteStream('./database/sampleDataScripts/reviewsData.csv'));
   for (let i = 0; i < documentNum; i++) {
     for (let j = 0; j < Math.floor(Math.random() * 26); j++) {
       let easeOfAssembly = Math.floor(Math.random() * 5 + 1);
@@ -17,16 +17,7 @@ const generateFakeReviewDataScript = () => {
       let appearance = Math.floor(Math.random() * 5 + 1);
       let worksAsExpected = Math.floor(Math.random() * 5 + 1);
       let body = faker.lorem.paragraphs();
-      body = body.split(/[\r\n]/);
 
-      let length = body.length;
-      let newBody = [];
-      for (let i = 0; i < length; i++) {
-        if (body[i] !== ' ') {
-          newBody.push(body[i] + '\u03A3');
-        }
-      }
-      newBody = newBody.join('');
       writer.write({
         id: id,
         easeOfAssembly: easeOfAssembly,
@@ -38,13 +29,13 @@ const generateFakeReviewDataScript = () => {
         createdAt: faker.date.past(),
         iRecommendThisProduct: faker.random.boolean(),
         header: faker.lorem.words(),
-        body: newBody
+        body: body
       })
     }
     id++;
   }
   writer.end();
-  console.log('Reviews pipe closed');
+  console.log(`Reviews pipe closed. This seed script took ${new Date() - start} milliseconds to make ${documentNum} CSV lines.`);
 }
 
 generateFakeReviewDataScript();

@@ -3,12 +3,13 @@ const fs = require('fs');
 const csvWriter = require('csv-write-stream');
 let writer = csvWriter();
 
-let documentNum = 1000000;
+let documentNum = 10;
 let id = 0;
 let samePrice = true;
 
 const generateFakeItemDataScript = () => {
-  writer.pipe(fs.createWriteStream('./db/sampleDataScripts/itemData.csv'));
+  let start = new Date();
+  writer.pipe(fs.createWriteStream('./database/sampleDataScripts/itemData.csv'));
   for (let i = 0; i < documentNum; i++) {
     let title = faker.lorem.word();
 
@@ -46,7 +47,7 @@ const generateFakeItemDataScript = () => {
 
     let sizes = [];
     let sizeOptions = ['Small', 'Medium', 'Large', 'XL']
-    for (let j = 0; j < Math.floor(Math.random() * sizeOptions.length); j++) {
+    for (let j = 0; j < Math.floor(Math.random() * sizeOptions.length - 1); j++) {
       sizes.push(sizeOptions[j]);
     }
 
@@ -73,7 +74,7 @@ const generateFakeItemDataScript = () => {
     id++;
   }
   writer.end();
-  console.log('Items pipe closed!');
+  console.log(`Items pipe closed! This seed script took ${new Date() - start} milliseconds to make ${documentNum} CSV lines.`);
 }
 
 generateFakeItemDataScript();
