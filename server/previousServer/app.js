@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const db = require('../db/')
+const db = require('../../database/DataOnPreviousApp/MongoDBDatabase')
 const path = require('path');
 
 
@@ -19,7 +19,7 @@ app.get('/api/productOptions/products/:id', (req, res) => {
       res.json(results);
     })
     .catch((err) => {
-      console.log(err);
+      throw err;
       res.send(400);
     })
 })
@@ -27,17 +27,53 @@ app.get('/api/productOptions/products/:id', (req, res) => {
 app.patch('/api/productOptions/products/:id', (req, res) => {
   let id = req.params.id;
 
-  db.Item.findOne({ id })
+  db.Item.findOne({ id: id })
     .then((item) => {
-      console.log(item.liked)
+      // console.log(item.liked)
       item.liked = !item.liked;
       item.save();
       res.json(item);
     })
     .catch((err) => {
-      console.log(err);
+      throw err;
       res.send(400);
     })
+})
+
+app.put('/api/productOptions/products/:id', (req,res) => {
+  let id = req.params.id;
+  let newItem = req.body;
+  console.log('------------------------------- newItem:', newItem);
+
+  db.Item.countDocuments({ id: id })
+    .then((result) => {
+      if (result === 0) {
+        db.Item.insertMany(newItem)
+          .then((isDone) => {
+            console.log(`Item with id ${id} was not found. It has been created.`);
+            res.send(isDone);
+          })
+          .catch((err) => {
+            console.log(err);
+            res.send(400);
+          })
+      } else {
+        db.Item.findOneAndReplace({ id: id }, newItem)
+          .then((isDone) => {
+            console.log(`Item with id ${id} was replaced`);
+            res.send(201);
+          })
+          .catch((err) => {
+            console.log(err);
+            res.send(400);
+          })
+      }
+    })
+    .catch((err) => {
+      throw err;
+      res.send(400);
+    })
+
 })
 
 app.post('/api/productOptions/products/:id/reviews', (req, res) => {
@@ -52,12 +88,24 @@ app.post('/api/productOptions/products/:id/reviews', (req, res) => {
   })
 })
 
-app.delete('/', (req, res) => {
+app.delete('/api/productOptions/products/:id', (req, res) => {
+  let id = req.params.id;
+  db.Item.deleteOne({ id })
+  .then((results) => {
+    res.json(results);
+  })
+  .catch((err) => {
+    res.send(400);
+  })
+})
+
+app.delete('/api/data', (req, res) => {
   db.Item.deleteMany({})
   .then((results) => {
     res.json(results);
   })
   .catch((err) => {
+    throw err;
     res.send(400);
   })
 })
