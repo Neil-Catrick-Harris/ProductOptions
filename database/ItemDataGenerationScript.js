@@ -1,27 +1,32 @@
 const faker = require('faker');
 const fs = require('fs');
-const csvWriter = require('csv-write-stream');
-let writer = csvWriter();
 
-let documentNum = 10;
-let id = 0;
+let documentNum = 10**7;
+let start = new Date();
 let samePrice = true;
 
-const generateFakeItemDataScript = () => {
-  let start = new Date();
-  writer.pipe(fs.createWriteStream('./database/sampleDataScripts/itemData.csv'));
-  for (let i = 0; i < documentNum; i++) {
-    let title = faker.lorem.word();
+const writeItems = fs.createWriteStream('database/sampleDataScripts/itemData.csv');
+writeItems.write(`id,title,originalPrice,salePrice,description,liked,inStock\n`, 'utf8');
 
-    let description = faker.lorem.sentence();
-    let price;
-    let currentPrice = faker.commerce.price();
-    if (samePrice) {
-       price = {
-        originalPrice: currentPrice,
-        salePrice: currentPrice
-      }
-    } else {
+const generateFakeItemDataScript = (id, i, callback) => {
+
+
+  let write = () => {
+    let ok = true;
+    do{
+      i--;
+      id++;
+
+      let title = faker.lorem.word();
+
+      let description = faker.lorem.sentence();
+      let originalPrice;
+      let salePrice;
+      let currentPrice = faker.commerce.price();
+      if (samePrice) {
+        originalPrice = currentPrice;
+        salePrice = currentPrice;
+      } else {
         let newPrice = faker.commerce.price();
         let higherPrice;
         let lowerPrice;
@@ -32,49 +37,36 @@ const generateFakeItemDataScript = () => {
           higherPrice = currentPrice;
           lowerPrice = newPrice;
         }
-        price = {
-          originalPrice: higherPrice,
-          salePrice: lowerPrice
-        }
+        originalPrice = higherPrice;
+        salePrice = lowerPrice;
+      }
+
+      samePrice = !samePrice;
+
+      let inStock;
+      if (Math.random() <= 0.2) {
+        inStock = 0;
+      } else {
+        inStock = Math.floor(Math.random() * 15000);
+      }
+      let data = `${id},${title},${originalPrice},${salePrice},${description},${false},${inStock}\n`;
+
+      if (i === 0) {
+        writeItems.write(data, 'utf-8', callback)
+      } else {
+        ok = writeItems.write(data, 'utf-8');
+      }
+    } while (i > 0 && ok) {
+      if (i > 0) {
+        writeItems.once('drain', write);
+      }
     }
-
-    samePrice = !samePrice
-
-    let colors = [];
-    for (let j = 0; j < Math.floor(Math.random() * 6); j++) {
-      colors.push(faker.commerce.color())
-    }
-
-    let sizes = [];
-    let sizeOptions = ['Small', 'Medium', 'Large', 'XL']
-    for (let j = 0; j < Math.floor(Math.random() * sizeOptions.length - 1); j++) {
-      sizes.push(sizeOptions[j]);
-    }
-
-    let liked = false;
-
-    let inStock;
-    if (Math.random() <= 0.2) {
-      inStock = 0;
-    } else {
-      inStock = Math.floor(Math.random() * 15000);
-    }
-
-    writer.write({
-      title: title,
-      description: description,
-      originalPrice: price.originalPrice,
-      salePrice: price.salePrice,
-      colors: colors,
-      sizes: sizes,
-      liked: liked,
-      inStock: inStock,
-      id: id
-    });
-    id++;
   }
-  writer.end();
-  console.log(`Items pipe closed! This seed script took ${new Date() - start} milliseconds to make ${documentNum} CSV lines.`);
+  write();
 }
 
-generateFakeItemDataScript();
+
+generateFakeItemDataScript(0, documentNum, () => {
+  writeItems.end();
+  console.log(`Items pipe closed! This seed script took ${new Date() - start} milliseconds to make ${documentNum} documents.`);
+});
