@@ -11,7 +11,6 @@ import Sidebar from './components/Sidebar.jsx'
 import {BrowserRouter as Router, Route, useParams } from 'react-router-dom';
 import axios from 'axios';
 
-
 const Icon = styled.svg`
 flex: none;
 transition: fill 0.25s;

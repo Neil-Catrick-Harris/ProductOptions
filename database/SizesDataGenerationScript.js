@@ -5,7 +5,7 @@ const fs = require('fs');
 let documentNum = 10**7;
 let start = new Date();
 
-const writeSizes = fs.createWriteStream('database/sampleDataScripts/sizeData.csv');
+const writeSizes = fs.createWriteStream('/Users/susannah/Desktop/Programming/Bootcampfiles/Projects/SDC/ProductOptions/database/sampleDataScripts/sizeData.csv');
 writeSizes.write(`id,sizes\n`, 'utf8');
 
 const generateFakeSizesDataScript = (id, i, callback) => {
