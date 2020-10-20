@@ -4,7 +4,7 @@ const fs = require('fs');
 let documentNum = 10**7;
 let start = new Date();
 
-const writeReviews = fs.createWriteStream('database/sampleDataScripts/reviewData.csv');
+const writeReviews = fs.createWriteStream('/Users/susannah/Desktop/Programming/Bootcampfiles/Projects/SDC/ProductOptions/database/sampleDataScripts/reviewData.csv');
 writeReviews.write(`id,easeOfAssembly,valueForMoney,productQuality,appearance,worksAsExpected,overallRating,createdAt,iRecommendThisProduct,header,body\n`, 'utf8');
 
 const generateFakeReviewDataScript = (id, i, callback) => {
@@ -25,22 +25,23 @@ const generateFakeReviewDataScript = (id, i, callback) => {
       let header = '';
       let body = '';
       let data = [];
-      for (let j = 0; j < Math.floor(Math.random() * 26); j++) {
+      // taken from below for iteration count: Math.floor(Math.random() * 26)
+      for (let j = 0; j < 2; j++) {
         easeOfAssembly = Math.floor(Math.random() * 5 + 1);
         valueForMoney = Math.floor(Math.random() * 5 + 1);
         productQuality = Math.floor(Math.random() * 5 + 1);
         appearance = Math.floor(Math.random() * 5 + 1);
         worksAsExpected = Math.floor(Math.random() * 5 + 1);
         overallRating = Math.floor((easeOfAssembly + valueForMoney + productQuality + appearance + worksAsExpected) / 5);
-        createdAt = faker.date.past();
-        iRecommendThisProduct = faker.random.boolean();
+        createdAt = randomDate(new Date(2017, 0, 1), new Date());
+        iRecommendThisProduct = Math.random() > .5 ? true : false;
         header = faker.lorem.words();
-        body = faker.lorem.paragraphs();
+        body = faker.lorem.words();
 
-        data.push(`${id},${easeOfAssembly},${valueForMoney},${productQuality},${appearance},${worksAsExpected},${overallRating},${createdAt},${iRecommendThisProduct},${header},"${body}"`);
+        data.push(`${id},${easeOfAssembly},${valueForMoney},${productQuality},${appearance},${worksAsExpected},${overallRating},${createdAt},${iRecommendThisProduct},${header},"${body}"\n`);
 
       }
-      data = data.join('\n');
+      data = data.join('');
       if (i === 0) {
         writeReviews.write(data, 'utf-8', callback)
       } else {
@@ -61,3 +62,7 @@ generateFakeReviewDataScript(0, documentNum, () => {
   writeReviews.end();
   console.log(`Reviews pipe closed! This seed script took ${new Date() - start} milliseconds to make ${documentNum} documents.`);
 });
+
+function randomDate(start, end) {
+  return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime())).toDateString();
+}

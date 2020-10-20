@@ -5,7 +5,7 @@ let documentNum = 10**7;
 let start = new Date();
 let samePrice = true;
 
-const writeItems = fs.createWriteStream('database/sampleDataScripts/itemData.csv');
+const writeItems = fs.createWriteStream('/Users/susannah/Desktop/Programming/Bootcampfiles/Projects/SDC/ProductOptions/database/sampleDataScripts/itemData.csv');
 writeItems.write(`id,title,originalPrice,salePrice,description,liked,inStock\n`, 'utf8');
 
 const generateFakeItemDataScript = (id, i, callback) => {
