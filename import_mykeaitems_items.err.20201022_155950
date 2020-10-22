@@ -1,0 +1,91 @@
+const fs = require('fs');
+const _ = require('underscore');
+let documentNum = 10**7;
+let start = new Date();
+let samePrice = true;
+const writeItems = fs.createWriteStream('/Users/susannah/Desktop/Programming/Bootcampfiles/Projects/SDC/ProductOptions/database/cassandra/csvsfiles/cassItemData.csv');
+writeItems.write(`id,title,colors,sizes,originalPrice,salePrice,description,liked,inStockn`, 'utf8');
+    let ok = true;
+      i--;
+      id++;
+      let title = faker.lorem.word();
+      let sizes = [];
+      let description = faker.lorem.sentence();
+      let originalPrice;
+      let salePrice;
+      let currentPrice = faker.commerce.price();
+          sizes.push(sizeOptions[j]);
+      let colors = [];
+      colors = _.uniq(colors);
+        originalPrice = currentPrice;
+        salePrice = currentPrice;
+        let newPrice = faker.commerce.price();
+        let higherPrice;
+        let lowerPrice;
+          higherPrice = newPrice;
+          lowerPrice = currentPrice;
+          higherPrice = currentPrice;
+          lowerPrice = newPrice;
+        originalPrice = higherPrice;
+        salePrice = lowerPrice;
+      samePrice = !samePrice;
+      let inStock;
+        inStock = 0;
+        inStock = Math.floor(Math.random() * 15000);
+        ok = writeItems.write(item, 'utf-8');
+        writeItems.once('drain', write);
+  write();
+  writeItems.end();
+  console.log(`Items pipe closed! This seed script took ${new Date() - start} milliseconds to make ${documentNum} documents.`);
+});
+  return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime())).toDateString();
+      for (let j = 0; j < 4; j++) {
+      for (let j = 0; j < Math.floor(Math.random() * 6); j++) {
+      let item = `${id};${title};${colors.join()};${sizes.join()};${originalPrice};${salePrice};${description};${false};${inStock}n`;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+const generateFakeItemDataScript = (id, i, callback) => {
+  let write = () => {
+    do{
+      let sizeOptions = ['Small', 'Medium', 'Large', 'XL']
+        if (Math.random() > .2) {
+        }
+      }
+        colors.push(faker.commerce.color())
+      }
+      if (samePrice) {
+      } else {
+        if (newPrice > currentPrice) {
+        } else {
+        }
+      }
+      if (Math.random() <= 0.2) {
+      } else {
+      }
+      if (i === 0) {
+        writeItems.write(item, 'utf-8', callback)
+      } else {
+      }
+    } while (i > 0 && ok) {
+      if (i > 0) {
+      }
+    }
+  }
+}
+generateFakeItemDataScript(0, documentNum, () => {
+function randomDate(start, end) {
+}
