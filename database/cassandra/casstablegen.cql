@@ -18,7 +18,7 @@ CREATE TABLE IF NOT EXISTS mykeaitems.itemReviews (
   appearance int,
   works_as_expected int,
   overall_rating int,
-  created_at text ,
+  created_at text,
   i_recommend_this_product BOOLEAN ,
   header text ,
   body text,

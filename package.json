@@ -21,6 +21,7 @@
     "cassReviewGenData": "node ./database/cassandra/reviewdatagenscript.js",
     "cassDBgenData": "cqlsh --file=\"/Users/susannah/Desktop/Programming/Bootcampfiles/Projects/SDC/ProductOptions/database/cassandra/cassdbgen.cql\"",
     "casstablegenData": "cqlsh --file=\"/Users/susannah/Desktop/Programming/Bootcampfiles/Projects/SDC/ProductOptions/database/cassandra/casstablegen.cql\"",
+    "cassitemtablegenData": "cqlsh --file=\"/Users/susannah/Desktop/Programming/Bootcampfiles/Projects/SDC/ProductOptions/database/cassandra/cassitemtablegen.cql\"",
     "cassreviewstableseeding": "cqlsh --file=\"/Users/susannah/Desktop/Programming/Bootcampfiles/Projects/SDC/ProductOptions/database/cassandra/cassreviewsseedscript.cql\"",
     "cassitemtableseeding": "cqlsh --file=\"/Users/susannah/Desktop/Programming/Bootcampfiles/Projects/SDC/ProductOptions/database/cassandra/cassitemseedscript.cql\"",
     "cassReviewstableseeding": "cqlsh --file=\"/Users/susannah/Desktop/Programming/Bootcampfiles/Projects/SDC/ProductOptions/database/cassandra/cassreviewsseedscript.cql\"",

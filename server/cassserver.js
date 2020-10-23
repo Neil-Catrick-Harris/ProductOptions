@@ -3,6 +3,7 @@ const app = express();
 const port = 3000;
 const cassandra = require('cassandra-driver');
 const path = require('path');
+const {performance} = require('perf_hooks');
 const methods = require('./cassconnection.js');
 
 app.use(express.json())
@@ -16,19 +17,18 @@ const client = new cassandra.Client({
 });
 
 app.get('/api/productOptions/products/:id', (req, res) => {
-  console.time();
+  let start = performance.now();
   let id = req.params.id;
-  let query = `SELECT * FROM items WHERE id=${id}`;
+  let query = `SELECT * FROM mykeaitems.items WHERE id=${id}`;
   client.execute(query)
   .then((itemResults) => {
-    query = `SELECT * FROM itemReviews WHERE id=${id}`;
+    query = `SELECT * FROM mykeaitems.itemReviews WHERE id=${id}`;
     client.execute(query)
     .then((reviewResults) => {
-      console.log(`Product information for item with the id=${id} retrieved in `);
       let itemObj = itemResults.rows[0];
       itemObj.reviews = reviewResults.rows;
-      console.timeEnd();
-
+      let end = performance.now();
+      console.log(`Product information retrieved from database in ${end - start} milliseconds`);
       res.send(itemObj);
     })
     .catch((err) => {
@@ -40,26 +40,60 @@ app.get('/api/productOptions/products/:id', (req, res) => {
   })
 })
 
-app.patch('/api/productOptions/products/:id', (req, res) => {
+app.post('/api/productOptions/products/:id/reviews', (req, res) => {
+  let start = performance.now();
   let id = req.params.id;
-  res.send(result);
-})
-
-app.put('/api/productOptions/products/:id', (req,res) => {
-  let id = req.params.id;
-  let newItem = req.body;
-  let result = methods.putData(id, newItem);
-  res.send(result.rows[0]);
-})
-
-app.post('/api/productOptions/products/:id', (req, res) => {
-  const { title, colors, sizes, originalPrice, salePrice, description, liked, inStock } = req.body;
-  let id = req.params.id;
-  let query = `INSERT INTO items (id, title, colors, sizes, originalPrice, salePrice, description, liked, inStock) VALUES (${id}, '${title}', ${colors}, ${sizes}, ${originalPrice}, ${salePrice}, '${description}', ${liked}, ${inStock})`;
+  const { ease_of_assembly, value_for_money, product_quality, appearance, works_as_expected, overall_rating, created_at, i_recommend_this_product, header, body } = req.body;
+  let query = `INSERT INTO mykeaitems.itemReviews (id, ease_of_assembly, value_for_money, product_quality, appearance, works_as_expected, overall_rating, created_at, i_recommend_this_product, header, body) VALUES (${id}, ${ease_of_assembly}, ${value_for_money}, ${product_quality}, ${appearance}, ${works_as_expected}, ${overall_rating}, '${created_at}', ${i_recommend_this_product}, '${header}', '${body}')`;
   console.log(query);
   client.execute(query)
   .then((result) => {
-    console.log('Inserted new item: ', result);
+    let end = performance.now();
+    console.log(`Review inserted into database  in ${end - start} milliseconds`);
+    res.send(result);
+  })
+  .catch((err) => {
+    console.log('------------------------- ERROR ------------------------', err);
+  })
+})
+
+app.put('/api/productOptions/products/:id', (req,res) => {
+  let start = performance.now();
+  const { title, colors, sizes, originalPrice, salePrice, description, liked, inStock } = req.body;
+  let id = req.params.id;
+
+  let query = `UPDATE mykeaitems.items
+  SET title='${title}',
+  colors='${colors}',
+  sizes='${sizes}',
+  originalPrice=${originalPrice},
+  salePrice=${salePrice},
+  description='${description}',
+  liked=${liked},
+  inStock=${inStock}
+  WHERE id=${id};`
+
+  client.execute(query)
+  .then((result) => {
+    let end = performance.now();
+    console.log(`Item updated in database in ${end - start} milliseconds`);
+    res.send(result);
+  })
+  .catch((err) => {
+    console.log('------------------------- ERROR ------------------------', err);
+  })
+})
+
+app.post('/api/productOptions/products/:id', (req, res) => {
+  let start = performance.now();
+  const { title, colors, sizes, originalPrice, salePrice, description, liked, inStock } = req.body;
+  let id = req.params.id;
+  let query = `INSERT INTO mykeaitems.items (id, title, colors, sizes, originalPrice, salePrice, description, liked, inStock) VALUES (${id}, '${title}', '${colors}', '${sizes}', ${originalPrice}, ${salePrice}, '${description}', ${liked}, ${inStock})`;
+  console.log(query);
+  client.execute(query)
+  .then((result) => {
+    let end = performance.now();
+    console.log(`Item inserted into database  in ${end - start} milliseconds`);
     res.send(result);
   })
   .catch((err) => {
@@ -68,13 +102,22 @@ app.post('/api/productOptions/products/:id', (req, res) => {
 })
 
 app.delete('/api/productOptions/products/:id', (req, res) => {
+  let start = performance.now();
   let id = req.params.id;
-  let query = `DELETE id, title, colors, sizes, originalPrice, salePrice, description, liked, inStock FROM items WHERE id=${id}`;
+  let query = `DELETE FROM mykeaitems.items WHERE id=${id}`;
   console.log(query);
   client.execute(query)
   .then((result) => {
-    console.log('Deleted item item: ', result);
-    res.send(result);
+    query = `DELETE FROM  mykeaitems.itemReviews WHERE id=${id}`;
+    client.execute(query)
+    .then((result) => {
+      let end = performance.now();
+      console.log(`Item and reviews deleted from database in ${end - start} milliseconds`);
+      res.send(result);
+    })
+    .catch((err) => {
+      console.log('------------------------- ERROR ------------------------', err);
+    })
   })
   .catch((err) => {
     console.log('------------------------- ERROR ------------------------', err);
@@ -83,16 +126,17 @@ app.delete('/api/productOptions/products/:id', (req, res) => {
 
 //this is untested for obvious reasons, but it is from the legacy code
 app.delete('/api/data', (req, res) => {
-  let query = `DELETE * FROM items`;
-  console.log(query);
-  client.execute(query)
-  .then((result) => {
-    console.log('Deleted item item: ', result);
-    res.send(result);
-  })
-  .catch((err) => {
-    console.log('------------------------- ERROR ------------------------', err);
-  })
+  res.send("No. We won't be doing that...");
+  // let query = `DROP TABLE IF EXISTS mykeaitems.items;`;
+  // console.log(query);
+  // client.execute(query)
+  // .then((result) => {
+  //   console.log('Deleted item item: ', result);
+  //   res.send(result);
+  // })
+  // .catch((err) => {
+  //   console.log('------------------------- ERROR ------------------------', err);
+  // })
 })
 
 app.get('/products/*', (req, res) => {
