@@ -107,7 +107,7 @@ exports.deleteData = (id) => {
   .then((result) => {
     return client.query(`DELETE FROM reviews WHERE item_id=${id}`)
     .then((result) => {
-      console.log(result);
+      return result;
     })
     .catch((err) => {
       console.log('------------------------- ERROR ------------------------', err);
