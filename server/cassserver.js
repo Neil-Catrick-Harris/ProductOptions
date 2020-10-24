@@ -16,7 +16,6 @@ app.get('/api/productOptions/products/:id', (req, res) => {
   let id = req.params.id;
   methods.getData(id)
   .then((result) => {
-    console.log('results', result);
     res.send(result);
   })
   .catch((err) => {

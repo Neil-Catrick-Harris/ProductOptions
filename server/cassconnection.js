@@ -26,12 +26,10 @@ exports.getData = (id) => {
   })
 };
 
-exports.postDataReview = (id, overallRating, easeOfAssembly, valueForMoney, productQuality, appearance, worksAsExpected, header, body, createdAt, iRecommendThisProduct) => {
+exports.postDataReview = (id, easeOfAssembly, valueForMoney,productQuality, appearance, worksAsExpected, overallRating,createdAt, iRecommendThisProduct, header, body) => {
  return client.execute(`INSERT INTO mykeaitems.itemReviews (id, ease_of_assembly, value_for_money,product_quality, appearance, works_as_expected, overall_rating,created_at, i_recommend_this_product, header, body) VALUES (${id}, ${easeOfAssembly}, ${valueForMoney}, ${productQuality}, ${appearance}, ${worksAsExpected}, ${overallRating}, '${createdAt}', ${iRecommendThisProduct}, '${header}', '${body}')`)
   .then((result) => {
-    return result.rows.map( (review) => {
-      return parseDataForFrontEndReview(review)
-    })
+    return result;
   })
   .catch((err) => {
     console.log('------------------------- ERROR ------------------------', err);
@@ -41,7 +39,7 @@ exports.postDataReview = (id, overallRating, easeOfAssembly, valueForMoney, prod
 exports.postDataItem = (id, title, colors, sizes, originalprice, saleprice, description, liked, inStock) => {
   return client.execute(`INSERT INTO mykeaitems.items (id, title, colors, sizes, originalprice, saleprice, description, liked, inStock) VALUES (${id}, '${title}', '${colors}', '${sizes}', ${originalprice}, ${saleprice}, '${description}', ${liked}, ${inStock})`)
   .then((result) => {
-    console.log('db result:',result);
+    return result;
   })
   .catch((err) => {
     console.log('------------------------- ERROR ------------------------', err);
@@ -76,7 +74,7 @@ exports.deleteData = (id) => {
   .then((result) => {
     return client.execute(`DELETE FROM  mykeaitems.itemReviews WHERE id=${id}`)
     .then((result) => {
-      console.log(result);
+      return result;
     })
     .catch((err) => {
       console.log('------------------------- ERROR ------------------------', err);
