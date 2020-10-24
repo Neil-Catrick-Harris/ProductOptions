@@ -1,12 +1,13 @@
 const faker = require('faker');
 const fs = require('fs');
+const _ = require('underscore');
 
 let documentNum = 10**7;
 let start = new Date();
 let samePrice = true;
 
-const writeItems = fs.createWriteStream('/Users/susannah/Desktop/Programming/Bootcampfiles/Projects/SDC/ProductOptions/database/sampleDataScripts/itemData.csv');
-writeItems.write(`id,title,originalPrice,salePrice,description,liked,inStock\n`, 'utf8');
+const writeItems = fs.createWriteStream('/Users/susannah/Desktop/Programming/Bootcampfiles/Projects/SDC/ProductOptions/database/postgreSQL/sampleDataScripts/itemData.csv');
+writeItems.write(`id;title;colorIds;sizeIds;originalPrice;salePrice;description;liked;inStock\n`, 'utf8');
 
 const generateFakeItemDataScript = (id, i, callback) => {
 
@@ -18,11 +19,27 @@ const generateFakeItemDataScript = (id, i, callback) => {
       id++;
 
       let title = faker.lorem.word();
-
+      let colorIds = [];
+      let sizeIds = [];
       let description = faker.lorem.sentence();
       let originalPrice;
       let salePrice;
       let currentPrice = faker.commerce.price();
+
+      for (let j = 0; j < 4; j++) {
+        if (Math.random() > .2) {
+          sizeIds.push(j);
+        }
+      }
+      sizeIds = sizeIds.join();
+
+      for (let j = 0; j < 6; j++) {
+        if (Math.random() > .2) {
+          colorIds.push(Math.floor(Math.random() * 32));
+        }
+      }
+      colorIds = _.uniq(colorIds).join();
+
       if (samePrice) {
         originalPrice = currentPrice;
         salePrice = currentPrice;
@@ -49,7 +66,7 @@ const generateFakeItemDataScript = (id, i, callback) => {
       } else {
         inStock = Math.floor(Math.random() * 15000);
       }
-      let data = `${id},${title},${originalPrice},${salePrice},${description},${false},${inStock}\n`;
+      let data = `${id};"${title}";"${colorIds}";"${sizeIds}";${originalPrice};${salePrice};"${description}";${false};${inStock}\n`;
 
       if (i === 0) {
         writeItems.write(data, 'utf-8', callback)

@@ -1,8 +1,8 @@
 const express = require('express');
 const app = express();
-const db = require('../../database/DataOnPreviousApp/MongoDBDatabase')
+const db = require('./MongoDBDatabase/index.js')
 const path = require('path');
-
+const port = 3000;
 
 app.use(express.json())
 app.use('/products', express.static('./client/dist'))
@@ -114,6 +114,6 @@ app.get('/products/*', (req, res) => {
   res.sendFile(path.join(__dirname, '../client/dist/index.html'));
 })
 
-
-
-module.exports = app;
+app.listen(port, () => {
+  console.log(`server listening on port ${port}`)
+})

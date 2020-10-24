@@ -2,3 +2,7 @@ node_modules
 client/dist/main.js
 package-lock.json
 *.csv
+couchdbacountinfo.js
+newrelic_agent.log
+newrelic.js
+psgsqlinfo.env

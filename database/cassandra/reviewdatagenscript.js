@@ -1,11 +1,13 @@
 const faker = require('faker');
 const fs = require('fs');
+const _ = require('underscore');
 
 let documentNum = 10**7;
 let start = new Date();
+let samePrice = true;
 
-const writeReviews = fs.createWriteStream('/Users/susannah/Desktop/Programming/Bootcampfiles/Projects/SDC/ProductOptions/database/sampleDataScripts/reviewData.csv');
-writeReviews.write(`id,easeOfAssembly,valueForMoney,productQuality,appearance,worksAsExpected,overallRating,createdAt,iRecommendThisProduct,header,body\n`, 'utf8');
+const writeReviews = fs.createWriteStream('/Users/susannah/Desktop/Programming/Bootcampfiles/Projects/SDC/ProductOptions/database/cassandra/csvsfiles/cassReviewData.csv');
+writeReviews.write(`id;easeOfAssembly;valueForMoney;productQuality;appearance;worksAsExpected;overallRating;createdAt;iRecommendThisProduct;header;body\n`, 'utf8');
 
 const generateFakeReviewDataScript = (id, i, callback) => {
 
@@ -38,7 +40,7 @@ const generateFakeReviewDataScript = (id, i, callback) => {
         header = faker.lorem.words();
         body = faker.lorem.words();
 
-        data.push(`${id},${easeOfAssembly},${valueForMoney},${productQuality},${appearance},${worksAsExpected},${overallRating},${createdAt},${iRecommendThisProduct},${header},"${body}"\n`);
+        data.push(`${id};${easeOfAssembly};${valueForMoney};${productQuality};${appearance};${worksAsExpected};${overallRating};${createdAt};${iRecommendThisProduct};${header};"${body}"\n`);
 
       }
       data = data.join('');
@@ -56,7 +58,6 @@ const generateFakeReviewDataScript = (id, i, callback) => {
   }
   write();
 }
-
 
 generateFakeReviewDataScript(0, documentNum, () => {
   writeReviews.end();

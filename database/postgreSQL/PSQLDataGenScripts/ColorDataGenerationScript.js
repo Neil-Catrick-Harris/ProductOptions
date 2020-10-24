@@ -1,10 +1,10 @@
 const faker = require('faker');
 const fs = require('fs');
 
-let documentNum = 10**7;
+let documentNum = 10**2;
 let start = new Date();
 
-const writeColors = fs.createWriteStream('/Users/susannah/Desktop/Programming/Bootcampfiles/Projects/SDC/ProductOptions/database/sampleDataScripts/colorData.csv');
+const writeColors = fs.createWriteStream('/Users/susannah/Desktop/Programming/Bootcampfiles/Projects/SDC/ProductOptions/database/postgreSQL/sampleDataScripts/colorData.csv');
 writeColors.write(`id,colors\n`, 'utf8');
 
 const generateFakeColorDataScript = (id, i, callback) => {
