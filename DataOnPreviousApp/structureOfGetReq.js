@@ -1,7 +1,3 @@
-tableid, itemid, size
-0,1,"Small"
-1,1,"Medium"
-
 
 {
   "price": {

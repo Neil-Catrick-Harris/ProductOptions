@@ -4,7 +4,7 @@ const fs = require('fs');
 let documentNum = 10**7;
 let start = new Date();
 
-const writeReviews = fs.createWriteStream('/Users/susannah/Desktop/Programming/Bootcampfiles/Projects/SDC/ProductOptions/database/sampleDataScripts/reviewData.csv');
+const writeReviews = fs.createWriteStream('/Users/susannah/Desktop/Programming/Bootcampfiles/Projects/SDC/ProductOptions/database/postgreSQL/sampleDataScripts/reviewData.csv');
 writeReviews.write(`id,easeOfAssembly,valueForMoney,productQuality,appearance,worksAsExpected,overallRating,createdAt,iRecommendThisProduct,header,body\n`, 'utf8');
 
 const generateFakeReviewDataScript = (id, i, callback) => {

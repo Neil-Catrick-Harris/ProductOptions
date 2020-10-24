@@ -34,13 +34,12 @@ const reviewSchema = mongoose.Schema({
  let Item = mongoose.model('Item', itemSchema);
 
 const createFakeData = () => {
-  let documentNum = 10;
 
   let dataArray = [];
   let id = 0;
   let samePrice = true;
 
-  for (let i = 0; i < documentNum; i++) {
+  for (let i = 0; i < 100; i++) {
     let reviews = [];
 
     for (let j = 0; j < Math.floor(Math.random() * 26); j++) {
@@ -130,7 +129,7 @@ Item.insertMany(createFakeData())
     Item.find({})
       .then((results) => {
         let end = new Date();
-        console.log(`Database took ${end - start} milliseconds to seed ${documentNum} documents using MongoDB with mongoose.`)
+        console.log(`Database took ${end - start} milliseconds to seed ${100} documents using MongoDB with mongoose.`)
         // console.log(results)
         // console.log(`${results.length} pieces of data in the database`)
         mongoose.connection.close()

@@ -33,7 +33,7 @@ const generateFakeItemDataScript = (id, i, callback) => {
       }
 
       let colors = [];
-      for (let j = 0; j < Math.floor(Math.random() * 6); j++) {
+      for (let j = 0; j < Math.floor(Math.random() * 7); j++) {
         colors.push(faker.commerce.color())
       }
       colors = _.uniq(colors);

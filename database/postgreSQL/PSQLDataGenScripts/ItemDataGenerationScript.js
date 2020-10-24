@@ -7,7 +7,7 @@ let start = new Date();
 let samePrice = true;
 
 const writeItems = fs.createWriteStream('/Users/susannah/Desktop/Programming/Bootcampfiles/Projects/SDC/ProductOptions/database/postgreSQL/sampleDataScripts/itemData.csv');
-writeItems.write(`id,title,colorIds,sizeIds,originalPrice,salePrice,description,liked,inStock\n`, 'utf8');
+writeItems.write(`id;title;colorIds;sizeIds;originalPrice;salePrice;description;liked;inStock\n`, 'utf8');
 
 const generateFakeItemDataScript = (id, i, callback) => {
 
@@ -66,7 +66,7 @@ const generateFakeItemDataScript = (id, i, callback) => {
       } else {
         inStock = Math.floor(Math.random() * 15000);
       }
-      let data = `${id},${title},"${colorIds}","${sizeIds}",${originalPrice},${salePrice},${description},${false},${inStock}\n`;
+      let data = `${id};"${title}";"${colorIds}";"${sizeIds}";${originalPrice};${salePrice};"${description}";${false};${inStock}\n`;
 
       if (i === 0) {
         writeItems.write(data, 'utf-8', callback)

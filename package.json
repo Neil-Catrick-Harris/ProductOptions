@@ -5,9 +5,11 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
-    "start": "node ./server/previousServer/server.js",
+    "start": "nodemon ./server/pgsqlserver.js",
+    "cassstart": "nodemon ./server/cassserver.js",
+    "oldServerStart": "nodemon ./DataOnPreviousApp/app.js",
     "nodemon": "nodemon ./server/previousServer/server.js",
-    "postinstall": "node ./database/DataOnPreviousApp/MongoDBDatabase/createFakeData.js",
+    "DBsetup": "node ./database/DataOnPreviousApp/MongoDBDatabase/createFakeData.js",
     "build": "webpack --watch",
     "psqlgenDataItems": "node ./database/postgreSQL/PSQLDataGenScripts/ItemDataGenerationScript.js",
     "psqlgenDataReviews": "node ./database/postgreSQL/PSQLDataGenScripts/ReviewDataGenerationScript.js",
@@ -24,8 +26,7 @@
     "cassitemtablegenData": "cqlsh --file=\"/Users/susannah/Desktop/Programming/Bootcampfiles/Projects/SDC/ProductOptions/database/cassandra/cassitemtablegen.cql\"",
     "cassreviewstableseeding": "cqlsh --file=\"/Users/susannah/Desktop/Programming/Bootcampfiles/Projects/SDC/ProductOptions/database/cassandra/cassreviewsseedscript.cql\"",
     "cassitemtableseeding": "cqlsh --file=\"/Users/susannah/Desktop/Programming/Bootcampfiles/Projects/SDC/ProductOptions/database/cassandra/cassitemseedscript.cql\"",
-    "cassReviewstableseeding": "cqlsh --file=\"/Users/susannah/Desktop/Programming/Bootcampfiles/Projects/SDC/ProductOptions/database/cassandra/cassreviewsseedscript.cql\"",
-    "cassServerStart": "nodemon ./server/cassserver.js"
+    "cassReviewstableseeding": "cqlsh --file=\"/Users/susannah/Desktop/Programming/Bootcampfiles/Projects/SDC/ProductOptions/database/cassandra/cassreviewsseedscript.cql\""
   },
   "author": "Client:August Dolan, Backend:Susannah Marcus",
   "license": "ISC",
@@ -36,6 +37,8 @@
     "faker": "^5.1.0",
     "moment": "^2.29.0",
     "mongoose": "^5.10.6",
+    "morgan": "^1.10.0",
+    "newrelic": "^6.13.2",
     "nodemon": "^2.0.6",
     "pg": "^8.4.1",
     "pg-hstore": "^2.3.3",
